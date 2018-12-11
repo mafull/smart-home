@@ -15,6 +15,7 @@
   "dependencies": {
     "dateformat": "^3.0.3",
     "express": "^4.16.4",
+    "morgan": "^1.9.1",
     "winston": "^3.1.0"
   },
   "devDependencies": {
