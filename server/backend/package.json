@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "clean": "rm -r node_modules",
+    "clean:logs": "rm -r logs/*",
     "start": "nodemon src/server.js --exec babel-node",
     "lint": "eslint --fix src"
   },
@@ -12,7 +13,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.4"
+    "dateformat": "^3.0.3",
+    "express": "^4.16.4",
+    "winston": "^3.1.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

@@ -2,6 +2,7 @@
 import http     from "http";
 // -- Application imports --
 import app      from "./app";
+import logger   from "./logger";
 
 
 // Create an http server
@@ -15,5 +16,5 @@ const port = 3010;
 const host = "localhost";
 server.listen(port, host, (err) => {
     if (err) throw err;
-    // console.log(`Listening at http://${host}:${port}`);
+    logger.info(`Listening at http://${host}:${port}`);
 });
