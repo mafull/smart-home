@@ -6,7 +6,7 @@ import express  from "express";
 const app = express();
 
 // Add routes
-app.get("/hi", (req, res, next) => res.send("Hello world!"));
+app.get("/hi", (req, res) => res.send("Hello world!"));
 
 
 export default app;
