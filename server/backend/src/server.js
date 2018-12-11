@@ -17,4 +17,4 @@ const host = "localhost";
 server.listen(port, host, (err) => {
     if (err) throw err;
     console.log(`Listening at http://${host}:${port}`);
-})
+});
