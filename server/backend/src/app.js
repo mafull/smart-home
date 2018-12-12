@@ -2,8 +2,9 @@
 import express  from "express";
 import morgan   from "morgan";
 // -- Application imports --
-import logger   from "./logger";
-
+import logger       from "./logger";
+import mqttClient   from "./mqttClient";
+import router       from "./routes";
 
 // Create an Express application
 const app = express();
@@ -15,7 +16,7 @@ app.use(morgan(
 ));
 
 // Add routes
-app.get("/hi", (req, res) => res.send("Hello world!"));
+app.use(router);
 
 
 export default app;

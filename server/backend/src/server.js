@@ -1,20 +1,28 @@
 // -- Node module imports --
 import http     from "http";
+import mosca    from "mosca";
 // -- Application imports --
-import app      from "./app";
-import logger   from "./logger";
+import app          from "./app";
+import logger       from "./logger";
+import mqttClient   from "./mqttClient";
+import mqttServer   from "./mqttServer";
 
 
-// Create an http server
-const server = http.createServer(app);
-server.on("error", (err) => {
+// Start the MQTT server and connect to it with a new client once it's ready
+mqttServer.start(() => {
+    mqttClient.start();
+});
+
+// Create the HTTP server
+const httpServer = http.createServer(app);
+httpServer.on("error", (err) => {
     if (err) throw err;
 });
 
-// Start listening
+// Start listening on the HTTP server
 const port = 3010;
 const host = "localhost";
-server.listen(port, host, (err) => {
+httpServer.listen(port, host, (err) => {
     if (err) throw err;
-    logger.info(`Listening at http://${host}:${port}`);
+    logger.info(`HTTP server listening at http://${host}:${port}`);
 });
