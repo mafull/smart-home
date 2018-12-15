@@ -7,7 +7,7 @@ const { format } = winston;
 
 
 // Create the log file directory if it does not exist
-const currentDir = __dirname.split(/([^/\\]*)[/\\][^/\\]*$/)[1];
+const currentDir = __dirname.split(/[\\/]/).pop();
 const isProd = (currentDir == "build");
 const logFileDir = isProd ? "../logs" : "./logs";
 if (!fs.existsSync(logFileDir)) fs.mkdirSync(logFileDir);
