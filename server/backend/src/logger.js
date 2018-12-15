@@ -7,12 +7,14 @@ const { format } = winston;
 
 
 // Create the log file directory if it does not exist
-const logFileDir = "./logs";
+const currentDir = __dirname.split(/([^/\\]*)[/\\][^/\\]*$/)[1];
+const isProd = (currentDir == "build");
+const logFileDir = isProd ? "../logs" : "./logs";
 if (!fs.existsSync(logFileDir)) fs.mkdirSync(logFileDir);
 
 // Generate the log file name based on the current date and time
 const logFileName = dateformat(new Date(), "yyyy-mm-dd_HH-MM-ss");
-const logFileFullName = path.join(logFileDir, logFileName + ".log");
+const logFileFullName = path.join(logFileDir, logFileName + (isProd ? ".log" : "_dev.log"));
 
 // Generate a combined format to be used for both file and console logging
 const combinedFormat = format.combine(
@@ -27,7 +29,7 @@ const combinedFormat = format.combine(
             message
         } = info;
 
-        const ts = timestamp.slice(0, -1).replace('T', ' ');
+        const ts = timestamp.slice(0, -1).replace("T", " ");
         return `${ts} [${level}]: ${message}`;
     })
 );
