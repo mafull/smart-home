@@ -16,7 +16,7 @@ app.use(morgan(
 ));
 
 // Add routes
-app.use(router);
+app.use("/api", router);
 
 
 export default app;
