@@ -8,7 +8,7 @@ let mqttServer = null;
 
 const mqttSettings = {
     port: 1883
-}
+};
 
 
 // Append an identifier to a normal log message @todo Make this centralised

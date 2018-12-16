@@ -55,7 +55,7 @@ const logger = winston.createLogger({
 
 // Add a stream object to the logger for morgan to use
 logger.stream = {
-    write: (message, encoding) => logger.info(message.trim())
+    write: (message) => logger.info(message.trim())
 };
 
 // Add the transports

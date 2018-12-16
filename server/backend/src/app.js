@@ -2,9 +2,15 @@
 import express  from "express";
 import morgan   from "morgan";
 // -- Application imports --
-import logger       from "./logger";
-import mqttClient   from "./mqttClient";
-import router       from "./routes";
+import { connectToDb }  from "./controllers/database";
+import logger           from "./logger";
+import router           from "./routes";
+
+
+// Connect to the MySQl database
+connectToDb(false, (err) => {
+    if (err) logger.error(err.message);
+});
 
 // Create an Express application
 const app = express();

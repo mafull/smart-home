@@ -1,11 +1,10 @@
 // -- Node module imports --
 import http     from "http";
-import mosca    from "mosca";
 // -- Application imports --
-import app          from "./app";
-import logger       from "./logger";
-import mqttClient   from "./mqttClient";
-import mqttServer   from "./mqttServer";
+import app              from "./app";
+import logger           from "./logger";
+import mqttClient       from "./mqttClient";
+import mqttServer       from "./mqttServer";
 
 
 // Start the MQTT server and connect to it with a new client once it's ready

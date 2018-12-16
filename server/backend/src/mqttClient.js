@@ -15,7 +15,7 @@ const log = (level, message, ...args) => logger.log(level, `MQTT Client > ${mess
 const start = () => {
     mqttClient = mqtt.connect("mqtt://localhost", { clientId: "local" });
     mqttClient.on("connect", () => {
-        log("info", "MQTT client connected")
+        log("info", "MQTT client connected");
 
         // Subscribe to the "test" topic
         mqttClient.subscribe("test");
