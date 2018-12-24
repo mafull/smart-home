@@ -59,8 +59,15 @@ const handlePOSTlogin = (req, res, next) => {
 };
 
 
+const handlePOSTlogout = (req, res, next) => {
+    res.clearCookie("token");
+    res.status(200).end();
+};
+
+
 export {
     authenticate,
 
-    handlePOSTlogin
+    handlePOSTlogin,
+    handlePOSTlogout
 };
