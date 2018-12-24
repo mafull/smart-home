@@ -15,6 +15,13 @@ connectToDb(false, (err) => {
 // Create an Express application
 const app = express();
 
+// Allow CORS
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-access-token");
+    next();
+});
+
 // Add morgan and configure it to use the winston logger stream
 app.use(morgan(
     ":remote-addr -> :method :url -> :status",
