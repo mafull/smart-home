@@ -1,5 +1,6 @@
 import {
     arrayOf,
+    func,
     shape,
     string
 }                           from "prop-types";
@@ -36,11 +37,15 @@ UserList.propTypes = {
     users: arrayOf(shape({
         username: string.isRequired,
         email: string
-    }))
+    })),
+
+    getUsers: func.isRequired
 };
 
 UserList.defaultProps = {
-    users: []
+    users: [],
+
+    getUsers: () => null
 };
 
 

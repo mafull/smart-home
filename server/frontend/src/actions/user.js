@@ -1,21 +1,24 @@
-import axios from "axios";
+import { api }  from "./helper";
 
 import {
-    GET_USERS,
+    GET_USERS_REQUEST,
     GET_USERS_FAILURE,
     GET_USERS_SUCCESS
 } from "../actions/types";
 
 
 export const getUsers = () => dispatch => {
-    const request = axios.get("http://localhost:3010/api/user");
+    const request = api.get("user");
 
+    // Success
     request.then(response => {
         dispatch({
             type: GET_USERS_SUCCESS,
-            payload: response.data
+            payload: response.data.users
         });
     });
+
+    // Failure
     request.catch(error => {
         dispatch({
             type: GET_USERS_FAILURE,
@@ -23,5 +26,5 @@ export const getUsers = () => dispatch => {
         });
     });
 
-    return dispatch({ type: GET_USERS });
+    return dispatch({ type: GET_USERS_REQUEST });
 };

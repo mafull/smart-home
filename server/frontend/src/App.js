@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import LoginForm            from "./containers/LoginForm";
 import UserList             from "./containers/UserList";
 
 import './App.css';
@@ -13,7 +14,8 @@ class App extends Component {
                     <p>
                         Edit <code>src/App.js</code> and save to reload.
                     </p>
-                    <UserList users={[ { name: "Max" }, { name: "Emily" } ]} />
+                    <LoginForm />
+                    <UserList />
                 </header>
             </div>
         );

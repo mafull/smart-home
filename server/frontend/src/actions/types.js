@@ -1,4 +1,12 @@
+// User
 export const
-    GET_USERS           = "GET_USERS",
+    GET_USERS_REQUEST   = "GET_USERS_REQUEST",
     GET_USERS_FAILURE   = "GET_USERS_FAILURE",
     GET_USERS_SUCCESS   = "GET_USERS_SUCCESS";
+
+// Auth
+export const
+    LOGIN_REQUEST = "LOGIN_REQUEST",
+    LOGIN_FAILURE = "LOGIN_FAILURE",
+    LOGIN_SUCCESS = "LOGIN_SUCCESS",
+    LOGOUT        = "LOGOUT";
