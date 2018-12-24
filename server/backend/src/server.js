@@ -1,5 +1,5 @@
 // -- Node module imports --
-import http     from "http";
+import http             from "http";
 // -- Application imports --
 import app              from "./app";
 import logger           from "./logger";

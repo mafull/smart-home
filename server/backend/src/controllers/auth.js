@@ -7,8 +7,11 @@ import logger   from "../logger";
 
 
 const authenticate = (req, res, next) => {
-    const token = req.headers["authorization"];
-    if (!token) return next(new Error("No token provided."));
+    const { token } = req.cookies;
+    if (!token) {
+        res.clearCookie("token");
+        return next(new Error("No token provided."))
+    };
 
     jwt.verify(token, config.jwt.secret, (err, decoded) => {
         if (err) return next(err);
@@ -23,7 +26,6 @@ const handlePOSTlogin = (req, res, next) => {
     if (!username) return next(new Error("No username provided."));
     if (!password) return next(new Error("No password provided."));
 
-    logger.debug("username: %s  password: %s", username, password);
     const query = `
         SELECT *
         FROM \`user\`
@@ -33,8 +35,6 @@ const handlePOSTlogin = (req, res, next) => {
         if (userErr) return next(userErr);
 
         const [user] = userResults;
-        logger.debug(user);
-        logger.debug(JSON.stringify(user));
         bcrypt.compare(password, user.password_hash, (passErr, match) => {
             if (passErr) return next(passErr);
             if (!match) return next(new Error("Incorrect password."));
@@ -42,11 +42,18 @@ const handlePOSTlogin = (req, res, next) => {
             delete user.password_hash;
 
             const token = jwt.sign(
-                { user: user },
+                { username: user.username },
                 config.jwt.secret,
                 config.jwt.options
             );
-            res.json(token);
+            res
+                .status(200)
+                .cookie("token", token, {
+                    expires: false,
+                    httpOnly: false,
+                    maxAge: parseInt(config.jwt.options.expiresIn)
+                })
+                .json({ user });
         });
     });
 };

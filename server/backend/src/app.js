@@ -1,11 +1,17 @@
 // -- Node module imports --
-import express  from "express";
-import morgan   from "morgan";
+import bodyParser       from "body-parser";
+import cookieParser     from "cookie-parser";
+import cors             from "cors";
+import dotenv           from "dotenv";
+import express          from "express";
+import morgan           from "morgan";
 // -- Application imports --
 import { connectToDb }  from "./controllers/database";
 import logger           from "./logger";
 import router           from "./routes";
 
+// Configure dotenv
+dotenv.config();
 
 // Connect to the MySQl database
 connectToDb(false, (err) => {
@@ -15,12 +21,16 @@ connectToDb(false, (err) => {
 // Create an Express application
 const app = express();
 
-// Allow CORS
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-access-token");
-    next();
-});
+// Configure third-party middleware
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(cors({
+    credentials: true,
+    origin: process.env.NODE_ENV === "dev" ? "http://localhost:3000" : "http://fullersmarthome.ddns.net"
+}));
+
+// Enable cookie parsing
+app.use(cookieParser());
 
 // Add morgan and configure it to use the winston logger stream
 app.use(morgan(

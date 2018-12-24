@@ -10,7 +10,7 @@ export default {
     },
     "jwt": {
         "options": {
-            "expiresIn": "1h"
+            "expiresIn": 60 * 60 * 1000
         },
         "secret": "borisIsNotReallyACat"
     }

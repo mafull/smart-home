@@ -11,7 +11,7 @@ const handleGETuser = (req, res, next) => {
     res.locals.db.query(query, (err, results) => {
         if (err) return next(err);
 
-        res.json(results);
+        res.json({ users: results });
     });
 };
 
