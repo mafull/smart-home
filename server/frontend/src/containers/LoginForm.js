@@ -2,7 +2,7 @@ import { func }             from "prop-types";
 import React, { Component } from "react";
 import { connect }          from "react-redux";
 
-import { attemptLogin }     from "../actions/auth";
+import { logIn, logOut }    from "../actions/auth";
 
 
 class LoginForm extends Component {
@@ -18,10 +18,14 @@ class LoginForm extends Component {
         });
     };
 
+    handleLogOut = (e) => {
+        this.props.logOut()
+    };
+
     handleSubmit = (e) => {
         e.preventDefault();
 
-        this.props.attemptLogin({
+        this.props.logIn({
             username: this.state.username,
             password: this.state.password
         });
@@ -30,50 +34,55 @@ class LoginForm extends Component {
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit}>
-                <fieldset disabled={this.props.attemptingLogin}>
-                    <label>
-                        Username
+            <div>
+                <form onSubmit={this.handleSubmit}>
+                    <fieldset disabled={this.props.authenticating}>
+                        <label>
+                            Username
+                            <input
+                                type="text"
+                                name="username"
+                                value={this.state.username}
+                                onChange={this.handleChange}
+                            />
+                        </label>
+                        <br />
+                        <label>
+                            Password
+                            <input
+                                type="password"
+                                name="password"
+                                value={this.state.password}
+                                onChange={this.handleChange}
+                            />
+                        </label>
+                        <br />
                         <input
-                            type="text"
-                            name="username"
-                            value={this.state.username}
-                            onChange={this.handleChange}
+                            type="submit"
+                            value="Log In"
                         />
-                    </label>
-                    <br />
-                    <label>
-                        Password
-                        <input
-                            type="password"
-                            name="password"
-                            value={this.state.password}
-                            onChange={this.handleChange}
-                        />
-                    </label>
-                    <br />
-                    <input
-                        type="submit"
-                        value="Log In"
-                    />
-                </fieldset>
-            </form>
+                    </fieldset>
+                </form>
+                <button onClick={this.handleLogOut}>
+                    Log Out
+                </button>
+            </div>
         );
     }
 };
 
 
 LoginForm.propTypes = {
-    attemptLogin: func.isRequired
+    logIn: func.isRequired
 };
 
 LoginForm.defaultProps = {
-    attemptLogin: () => null
+    logIn: () => null
 };
 
 
 const mapStateToProps = state => {
-    return { };
+    return { authenticating: state.auth.authenticating };
 }
 
-export default connect(mapStateToProps, { attemptLogin })(LoginForm);
+export default connect(mapStateToProps, { logIn, logOut })(LoginForm);
