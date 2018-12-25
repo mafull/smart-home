@@ -21,6 +21,14 @@ const authenticate = (req, res, next) => {
 };
 
 
+const handlePOSTcheck = (req, res, next) => {
+    authenticate(req, res, (error) => {
+        const authenticated = !error;
+        res.status(200).json({ loggedIn: authenticated });
+    });
+}
+
+
 const handlePOSTlogin = (req, res, next) => {
     const { username, password } = req.body;
     if (!username) return next(new Error("No username provided."));
@@ -68,6 +76,7 @@ const handlePOSTlogout = (req, res, next) => {
 export {
     authenticate,
 
+    handlePOSTcheck,
     handlePOSTlogin,
     handlePOSTlogout
 };
