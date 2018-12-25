@@ -1,25 +1,37 @@
-import React, { Component } from 'react';
+import React                from "react";
+import {
+    BrowserRouter as Router,
+    Link,
+    Redirect,
+    Route,
+    Switch
+}                           from "react-router-dom";
 
-import LoginForm            from "./containers/LoginForm";
+import LoginPage            from "./containers/LoginPage";
 import UserList             from "./containers/UserList";
+import LoggedInRoute        from "./LoggedInRoute";
 
 
+const Nav = () => (
+    <ul>
+        <Link to="/"><li>Home</li></Link>
+        <Link to="/login"><li>Login Page</li></Link>
+        <Link to="/users"><li>User List</li></Link>
+    </ul>
+);
 
-class App extends Component {
-    render() {
-        return (
-            <div className="App">
-                <header className="App-header">
-                    <p>
-                        Edit <code>src/App.js</code> and save to reload.
-                    </p>
-                    <LoginForm />
-                    <UserList />
-                </header>
-            </div>
-        );
-    }
-}
+
+const App = () => (
+    <div>
+        <Nav />
+        <Switch>
+            <Redirect exact from="/" to="/users" />
+            <Route path="/login" exact component={LoginPage} />
+            <LoggedInRoute path="/users" exact component={UserList} />
+            <Redirect from="/" to="/" />
+        </Switch>
+    </div>
+);
 
 
 export default App;

@@ -1,11 +1,16 @@
-import { func }             from "prop-types";
+import { bool, func }       from "prop-types";
 import React, { Component } from "react";
 import { connect }          from "react-redux";
+import { Redirect }         from "react-router";
 
-import { logIn, logOut }    from "../actions/auth";
+import {
+    checkAuth,
+    logIn,
+    logOut
+}                           from "../actions/auth";
 
 
-class LoginForm extends Component {
+class LoginPage extends Component {
     state = {
         username: "",
         password: ""
@@ -32,7 +37,18 @@ class LoginForm extends Component {
     };
 
 
+    componentDidMount() {
+        if (this.props.loggedIn === null) {
+            this.props.checkAuth();
+        }
+    }
+
     render() {
+        if (this.props.loggedIn) {
+            const { from } = 
+                this.props.location.state || { from: { pathname: "/" } };
+            return <Redirect to={from} />
+        }
         return (
             <div>
                 <form onSubmit={this.handleSubmit}>
@@ -72,17 +88,27 @@ class LoginForm extends Component {
 };
 
 
-LoginForm.propTypes = {
+LoginPage.propTypes = {
+    authenticating: bool,
+    loggedIn: bool,
+
+    checkAuth: func,
     logIn: func.isRequired
 };
 
-LoginForm.defaultProps = {
+LoginPage.defaultProps = {
+    authenticating: false,
+    loggedIn: null,
+
+    checkAuth: () => null,
     logIn: () => null
 };
 
 
-const mapStateToProps = state => {
-    return { authenticating: state.auth.authenticating };
-}
-
-export default connect(mapStateToProps, { logIn, logOut })(LoginForm);
+export default connect(
+    state => ({
+        authenticating: state.auth.authenticating,
+        loggedIn: state.auth.loggedIn
+    }),
+    { checkAuth, logIn, logOut }
+)(LoginPage);
