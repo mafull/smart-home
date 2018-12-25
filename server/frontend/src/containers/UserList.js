@@ -17,9 +17,13 @@ class UserList extends Component {
     };
 
     render() {
-        const listItems = this.props.users.map((user, i) => {
-            return <UserListItem key={i} {...user} />;
-        })
+        const listItems = this.props.users
+            .sort((a, b) => (
+                a.username.toLowerCase() > b.username.toLowerCase() ? 1 : -1
+            ))
+            .map((user, i) => (
+                <UserListItem key={i} {...user} />
+            ));
 
         return (
             <div>
