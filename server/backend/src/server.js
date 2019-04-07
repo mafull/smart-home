@@ -1,11 +1,14 @@
-// -- Node module imports --
 import http             from "http";
-// -- Application imports --
+
 import app              from "./app";
+import * as database    from "./database";
 import logger           from "./logger";
 import mqttClient       from "./mqttClient";
 import mqttServer       from "./mqttServer";
 
+
+// Initialise the database
+database.initialise();
 
 // Start the MQTT server and connect to it with a new client once it's ready
 mqttServer.start(() => {

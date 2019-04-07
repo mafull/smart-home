@@ -1,18 +1,16 @@
 // -- Node module imports --
 import express      from "express";
 // -- Application imports --
-import authRoutes   from "./auth";
-import userRoutes   from "./user";
+import authRouter   from "./auth";
+import usersRouter  from "./users";
 
 import { authenticate }     from "../controllers/auth";
-import { getDbConnection }  from "../controllers/database";
 
 
 const router = express.Router();
-router.use(getDbConnection);
-router.use("/auth", authRoutes);
-router.use(authenticate);
-router.use("/user", userRoutes);
+router.use("/auth", authRouter);
+// router.use(authenticate);
+router.use("/users", usersRouter);
 
 
 export default router;
