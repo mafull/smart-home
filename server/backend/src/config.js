@@ -5,7 +5,7 @@ export default {
     "db": {
         "database": "smart_home",
         "host": "localhost",
-        "password": "password",
+        "password": process.env.SMART_HOME_DB_PASSWORD || "password",
         "user": "node_backend"
     },
     "jwt": {
