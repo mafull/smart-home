@@ -1,6 +1,5 @@
-// -- Node module imports --
 import mosca    from "mosca";
-// -- Application imports --
+
 import logger   from "./logger";
 
 

@@ -1,4 +1,3 @@
-// -- Node module imports --
 import dateformat   from "dateformat";
 import fs           from "fs";
 import path         from "path";
