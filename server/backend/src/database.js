@@ -147,7 +147,7 @@ Models.Device.belongsToMany(Models.Capability, { through: Models.DeviceCapabilit
 Models.Capability.belongsToMany(Models.Device, { through: Models.DeviceCapabilityMap });
 
 const initialise = async () => {
-    await sequelize.sync({ force: true });
+    await sequelize.sync({ force: false });
     await Models.Role.create({ name: "default" });
     const adminRole = await Models.Role.create({ name: "admin" });
     await Models.User.create({
@@ -155,6 +155,18 @@ const initialise = async () => {
         passwordHash: "notreallyapasswordhash",
         userRoleId: adminRole.id
     });
+
+    const uRoom = await Models.Room.create({ name: "Utility Room" });
+    const heatingDev = await Models.Device.create({
+        name: "Heating Controller",
+        roomId: uRoom.id
+    });
+
+    const digOutCap = await Models.Capability.create({ name: "Digital Output" });
+    const diginCap = await Models.Capability.create({ name: "Digital Input" });
+    const anaInCap = await Models.Capability.create({ name: "Analogue Input" });
+    await heatingDev.addCapability(digOutCap);
+    await heatingDev.addCapability(anaInCap);
 };
 
 
