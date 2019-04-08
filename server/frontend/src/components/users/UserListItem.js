@@ -3,17 +3,17 @@ import React        from "react";
 
 
 const UserListItem = (props) => {
-    return (<li>{props.username}</li>);
+    return (<li>{props.name}</li>);
 };
 
 
 UserListItem.propTypes = {
-    username: string.isRequired,
+    name: string.isRequired,
     email: string,
 };
 
 UserListItem.defaultProps = {
-    username: "",
+    name: "",
     email: ""
 };
 
