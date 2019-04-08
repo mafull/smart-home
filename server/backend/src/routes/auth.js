@@ -1,6 +1,5 @@
-// -- Node module imports --
 import express      from "express";
-// -- Application imports --
+
 import {
     handlePOSTcheck,
     handlePOSTlogin,

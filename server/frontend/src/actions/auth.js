@@ -20,7 +20,7 @@ export const checkAuth = () => dispatch => {
     request.then(response => {
         dispatch({
             type: AUTH_CHECK_SUCCESS,
-            payload: response.data.loggedIn
+            payload: response.data.data
         });
     });
 
@@ -38,13 +38,13 @@ export const checkAuth = () => dispatch => {
 
 
 export const logIn = (credentials) => dispatch => {
-    const request = api.post("auth/login", credentials);
+    const request = api.post("auth/login", { data: credentials });
 
     // Success
     request.then(response => {
         dispatch({
             type: LOGIN_SUCCESS,
-            payload: response.data.user
+            payload: response.data.data
         });
     });
 

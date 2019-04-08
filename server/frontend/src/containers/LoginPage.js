@@ -12,7 +12,7 @@ import {
 
 class LoginPage extends Component {
     state = {
-        username: "",
+        name: "",
         password: ""
     };
 
@@ -31,7 +31,7 @@ class LoginPage extends Component {
         e.preventDefault();
 
         this.props.logIn({
-            username: this.state.username,
+            name: this.state.name,
             password: this.state.password
         });
     };
@@ -45,7 +45,7 @@ class LoginPage extends Component {
 
     render() {
         if (this.props.loggedIn) {
-            const { from } = 
+            const { from } =
                 this.props.location.state || { from: { pathname: "/" } };
             return <Redirect to={from} />
         }
@@ -54,11 +54,11 @@ class LoginPage extends Component {
                 <form onSubmit={this.handleSubmit}>
                     <fieldset disabled={this.props.authenticating}>
                         <label>
-                            Username
+                            name
                             <input
                                 type="text"
-                                name="username"
-                                value={this.state.username}
+                                name="name"
+                                value={this.state.name}
                                 onChange={this.handleChange}
                             />
                         </label>
