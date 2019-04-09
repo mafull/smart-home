@@ -24,8 +24,9 @@ const Models = {};
 
 Models.Role = sequelize.define("user_role", {
     name: {
+        allowNull: false,
         type: Sequelize.STRING,
-        allowNull: false
+        unique: true
     }
 }, {
     timestamps: false
@@ -34,7 +35,8 @@ Models.Role = sequelize.define("user_role", {
 Models.User = sequelize.define("user", {
     name: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true
     },
     passwordHash: {
         allowNull: false,
@@ -49,7 +51,8 @@ Models.User = sequelize.define("user", {
 Models.Room = sequelize.define("room", {
     name: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true
     }
 }, {
     timestamps: false
@@ -58,7 +61,8 @@ Models.Room = sequelize.define("room", {
 Models.Action = sequelize.define("action", {
     name: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true
     },
     capabilityId: {
         allowNull: false,
@@ -69,7 +73,8 @@ Models.Action = sequelize.define("action", {
 Models.Capability = sequelize.define("capability", {
     name: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true
     }
 }, {
     timestamps: false
@@ -78,11 +83,13 @@ Models.Capability = sequelize.define("capability", {
 Models.Device = sequelize.define("device", {
     name: {
         allowNull: true,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: "uniqueKey"
     },
     roomId: {
         allowNull: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        unique: "uniqueKey"
     },
     isActive: {
         allowNull: false,
@@ -94,11 +101,13 @@ Models.Device = sequelize.define("device", {
 Models.DeviceCapabilityMap = sequelize.define("device_capability_map", {
     deviceId: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        unique: "uniqueKey"
     },
     capabilityId: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        unique: "uniqueKey"
     }
 });
 
@@ -148,25 +157,29 @@ Models.Capability.belongsToMany(Models.Device, { through: Models.DeviceCapabilit
 
 const initialise = async () => {
     await sequelize.sync({ force: false });
-    await Models.Role.create({ name: "default" });
-    const adminRole = await Models.Role.create({ name: "admin" });
-    await Models.User.create({
-        name: "Max",
-        passwordHash: "notreallyapasswordhash",
-        userRoleId: adminRole.id
-    });
+    try {
+        await Models.Role.create({ name: "default" });
+        const adminRole = await Models.Role.create({ name: "admin" });
+        await Models.User.create({
+            name: "Max",
+            passwordHash: "$2b$10$NsflJKHHRPsG4GOgzKq9xulvsVfcktJ7Cg0AIePdG31oNmvfhyUnu",
+            userRoleId: adminRole.id
+        });
 
-    const uRoom = await Models.Room.create({ name: "Utility Room" });
-    const heatingDev = await Models.Device.create({
-        name: "Heating Controller",
-        roomId: uRoom.id
-    });
+        const uRoom = await Models.Room.create({ name: "Utility Room" });
+        const heatingDev = await Models.Device.create({
+            name: "Heating Controller",
+            roomId: uRoom.id
+        });
 
-    const digOutCap = await Models.Capability.create({ name: "Digital Output" });
-    const diginCap = await Models.Capability.create({ name: "Digital Input" });
-    const anaInCap = await Models.Capability.create({ name: "Analogue Input" });
-    await heatingDev.addCapability(digOutCap);
-    await heatingDev.addCapability(anaInCap);
+        const digOutCap = await Models.Capability.create({ name: "Digital Output" });
+        const diginCap = await Models.Capability.create({ name: "Digital Input" });
+        const anaInCap = await Models.Capability.create({ name: "Analogue Input" });
+        await heatingDev.addCapability(digOutCap);
+        await heatingDev.addCapability(anaInCap);
+    } catch (error) {
+        logger.error(error);
+    }
 };
 
 
