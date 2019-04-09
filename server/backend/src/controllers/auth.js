@@ -45,7 +45,7 @@ const handlePOSTlogin = async (req, res, next) => {
         if (!name) return next(new Error("No name provided."));
         if (!password) return next(new Error("No password provided."));
 
-        const user = await Models.User.findOne({
+        const user = await Models.User.unscoped().findOne({
             include: [Models.Role],
             where: { name }
         });

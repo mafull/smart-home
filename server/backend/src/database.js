@@ -46,6 +46,10 @@ Models.User = sequelize.define("user", {
         allowNull: false,
         type: Sequelize.INTEGER
     }
+}, {
+    defaultScope: {
+        attributes: { exclude: ["passwordHash"] }
+    }
 });
 
 Models.Room = sequelize.define("room", {
