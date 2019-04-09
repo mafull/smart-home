@@ -12,8 +12,22 @@ import { getUsers }         from "../actions/user";
 
 
 class UserList extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            messages: [],
+            ws: new WebSocket("ws://localhost:3010")
+        };
+
+        this.state.ws.onmessage = message => {
+            console.log(message);
+            this.setState({ messages: [...this.state.messages, message.data]});
+        }
+    }
+
     componentWillMount() {
         this.props.getUsers();
+
     };
 
     render() {
@@ -30,6 +44,10 @@ class UserList extends Component {
                 <h2>User List</h2>
                 <ul>
                     {listItems}
+                </ul>
+                <hr />
+                <ul>
+                    {this.state.messages.map(msg => <li>{msg}</li>)}
                 </ul>
             </div>
         );
