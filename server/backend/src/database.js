@@ -25,7 +25,7 @@ const Models = {};
 Models.Role = sequelize.define("user_role", {
     name: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(32),
         unique: true
     }
 }, {
@@ -35,12 +35,12 @@ Models.Role = sequelize.define("user_role", {
 Models.User = sequelize.define("user", {
     name: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(32),
         unique: true
     },
     passwordHash: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING(64)
     },
     userRoleId: {
         allowNull: false,
@@ -55,7 +55,7 @@ Models.User = sequelize.define("user", {
 Models.Room = sequelize.define("room", {
     name: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(32),
         unique: true
     }
 }, {
@@ -65,7 +65,7 @@ Models.Room = sequelize.define("room", {
 Models.Action = sequelize.define("action", {
     name: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(32),
         unique: true
     },
     capabilityId: {
@@ -77,7 +77,7 @@ Models.Action = sequelize.define("action", {
 Models.Capability = sequelize.define("capability", {
     name: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(32),
         unique: true
     }
 }, {
@@ -87,7 +87,7 @@ Models.Capability = sequelize.define("capability", {
 Models.Device = sequelize.define("device", {
     name: {
         allowNull: true,
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(32),
         unique: "uniqueKey"
     },
     roomId: {
@@ -118,11 +118,11 @@ Models.DeviceCapabilityMap = sequelize.define("device_capability_map", {
 Models.Alarm = sequelize.define("alarm", {
     name: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING(32)
     },
     deviceId: {
         allowNull: true,
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
     },
     actionId: {
         allowNull: false,
