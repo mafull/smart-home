@@ -16,7 +16,7 @@ class UserList extends Component {
         super(props);
         this.state = {
             messages: [],
-            ws: new WebSocket("ws://localhost:3010")
+            ws: new WebSocket("ws://localhost:3010/ws")
         };
 
         this.state.ws.onmessage = message => {
