@@ -10,13 +10,14 @@ import { connect }          from "react-redux";
 import UserListItem         from "../components/users/UserListItem";
 import { getUsers }         from "../actions/user";
 
+import { baseURL } from "../actions/helper";
 
 class UserList extends Component {
     constructor(props) {
         super(props);
         this.state = {
             messages: [],
-            ws: new WebSocket("ws://localhost:3010/ws")
+            ws: new WebSocket(baseURL + "/ws")
         };
 
         this.state.ws.onmessage = message => {
