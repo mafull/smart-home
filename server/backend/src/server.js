@@ -23,7 +23,7 @@ httpServer.on("error", (err) => {
 });
 
 // Create the WebSocket server instance
-const wsServer = new WebSocket.Server({ server: httpServer });
+const wsServer = new WebSocket.Server({ server: httpServer, path: "/ws" });
 wsServer.on("connection", (ws, req) => {
     logger.info("WS client connected");
 
