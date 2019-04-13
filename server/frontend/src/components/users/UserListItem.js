@@ -1,9 +1,11 @@
 import { string }   from "prop-types";
 import React        from "react";
 
+import ListGroup     from "react-bootstrap/ListGroup";
+
 
 const UserListItem = (props) => {
-    return (<li>{props.name}</li>);
+    return (<ListGroup.Item>{props.name}</ListGroup.Item>);
 };
 
 

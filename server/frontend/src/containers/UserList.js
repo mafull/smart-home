@@ -7,6 +7,8 @@ import {
 import React, { Component } from "react";
 import { connect }          from "react-redux";
 
+import ListGroup    from "react-bootstrap/ListGroup";
+
 import UserListItem         from "../components/users/UserListItem";
 import { getUsers }         from "../actions/user";
 
@@ -43,9 +45,9 @@ class UserList extends Component {
         return (
             <div>
                 <h2>User List</h2>
-                <ul>
+                <ListGroup>
                     {listItems}
-                </ul>
+                </ListGroup>
                 <hr />
                 <ul>
                     {this.state.messages.map(msg => <li>{msg}</li>)}

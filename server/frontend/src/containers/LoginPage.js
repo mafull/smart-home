@@ -1,7 +1,10 @@
-import { bool, func }       from "prop-types";
-import React, { Component } from "react";
-import { connect }          from "react-redux";
-import { Redirect }         from "react-router";
+import _                                from "lodash";
+import React, { useEffect, useState }   from "react";
+import { connect }                      from "react-redux";
+import { Redirect }                     from "react-router";
+
+import Button   from "react-bootstrap/Button";
+import Form     from "react-bootstrap/Form";
 
 import {
     checkAuth,
@@ -10,100 +13,47 @@ import {
 }                           from "../actions/auth";
 
 
-class LoginPage extends Component {
-    state = {
-        name: "",
-        password: ""
-    };
+const LoginPage = (props) => {
+    const [name, setName] = useState("");
+    const [password, setPassword] = useState("");
 
+    useEffect(() => {
+        if (_.isNull(props.loggedIn)) props.checkAuth();
+    }, []);
 
-    handleChange = (e) => {
-        this.setState({
-            [e.target.name]: e.target.value
-        });
-    };
+    if (props.loggedIn) {
+        const { from } = props.location.state || { from: { pathname: "/" } };
+        return <Redirect to={from} />
+    }
 
-    handleLogOut = (e) => {
-        this.props.logOut()
-    };
-
-    handleSubmit = (e) => {
+    const handleSubmit = e => {
         e.preventDefault();
-
-        this.props.logIn({
-            name: this.state.name,
-            password: this.state.password
-        });
+        props.logIn({ name, password });
     };
 
-
-    componentDidMount() {
-        if (this.props.loggedIn === null) {
-            this.props.checkAuth();
-        }
-    }
-
-    render() {
-        if (this.props.loggedIn) {
-            const { from } =
-                this.props.location.state || { from: { pathname: "/" } };
-            return <Redirect to={from} />
-        }
-        return (
-            <div>
-                <form onSubmit={this.handleSubmit}>
-                    <fieldset disabled={this.props.authenticating}>
-                        <label>
-                            name
-                            <input
-                                type="text"
-                                name="name"
-                                value={this.state.name}
-                                onChange={this.handleChange}
-                            />
-                        </label>
-                        <br />
-                        <label>
-                            Password
-                            <input
-                                type="password"
-                                name="password"
-                                value={this.state.password}
-                                onChange={this.handleChange}
-                            />
-                        </label>
-                        <br />
-                        <input
-                            type="submit"
-                            value="Log In"
-                        />
-                    </fieldset>
-                </form>
-                <button onClick={this.handleLogOut}>
-                    Log Out
-                </button>
-            </div>
-        );
-    }
+    return (
+        <React.Fragment>
+            <Form onSubmit={handleSubmit}>
+                <fieldset disabled={props.authenticating}>
+                    <Form.Group>
+                        <Form.Label>Name</Form.Label>
+                        <Form.Control type="text" value={name} onChange={e => setName(e.target.value)} />
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Label>Password</Form.Label>
+                        <Form.Control type="password" value={password} onChange={e => setPassword(e.target.value)} />
+                    </Form.Group>
+                    <Button type="submit" value="Log In">
+                        Log In
+                    </Button>
+                </fieldset>
+            </Form>
+            <Button onClick={props.logOut}>
+                Log Out
+            </Button>
+        </React.Fragment>
+    );
 };
-
-
-LoginPage.propTypes = {
-    authenticating: bool,
-    loggedIn: bool,
-
-    checkAuth: func,
-    logIn: func.isRequired
-};
-
-LoginPage.defaultProps = {
-    authenticating: false,
-    loggedIn: null,
-
-    checkAuth: () => null,
-    logIn: () => null
-};
-
 
 export default connect(
     state => ({
