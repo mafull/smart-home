@@ -1,17 +1,18 @@
-// -- Node module imports --
 import bcrypt   from "bcrypt";
 import jwt      from "jsonwebtoken";
-// -- Application imports --
-import config   from "../config";
-import logger   from "../logger";
+import util     from "util";
+
+import config       from "../config";
+import { Models }   from "../database";
+import logger       from "../logger";
 
 
 const authenticate = (req, res, next) => {
     const { token } = req.cookies;
     if (!token) {
         res.clearCookie("token");
-        return next(new Error("No token provided."))
-    };
+        return next(new Error("No token provided."));
+    }
 
     jwt.verify(token, config.jwt.secret, (err, decoded) => {
         if (err) return next(err);
@@ -20,56 +21,67 @@ const authenticate = (req, res, next) => {
     });
 };
 
+const handlePOSTcheck = async (req, res, next) => {
+    try {
+        const { name } = res.locals.decodedToken || {};
+        if (!name) return next(new Error("Invalid token."));
 
-const handlePOSTcheck = (req, res, next) => {
-    authenticate(req, res, (error) => {
-        const authenticated = !error;
-        res.status(200).json({ loggedIn: authenticated });
-    });
-}
-
-
-const handlePOSTlogin = (req, res, next) => {
-    const { username, password } = req.body;
-    if (!username) return next(new Error("No username provided."));
-    if (!password) return next(new Error("No password provided."));
-
-    const query = `
-        SELECT *
-        FROM \`user\`
-        WHERE \`username\` = '${username}';
-    `;
-    res.locals.db.query(query, (userErr, userResults) => {
-        if (userErr) return next(userErr);
-
-        const [user] = userResults;
-        bcrypt.compare(password, user.password_hash, (passErr, match) => {
-            if (passErr) return next(passErr);
-            if (!match) return next(new Error("Incorrect password."));
-
-            delete user.password_hash;
-
-            const token = jwt.sign(
-                { username: user.username },
-                config.jwt.secret,
-                config.jwt.options
-            );
-            res
-                .status(200)
-                .cookie("token", token, {
-                    expires: false,
-                    httpOnly: false,
-                    maxAge: parseInt(config.jwt.options.expiresIn)
-                })
-                .json({ user });
+        const user = await Models.User.findOne({
+            include: [Models.Role],
+            where: { name }
         });
-    });
+        if (!user) return next(new Error(`No user found with name '${name}'.`));
+
+        return res.status(200).send({ data: user });
+    } catch (error) {
+        return next(error);
+    }
 };
 
 
+const handlePOSTlogin = async (req, res, next) => {
+    try {
+        const { name, password } = req.body.data;
+        if (!name) return next(new Error("No name provided."));
+        if (!password) return next(new Error("No password provided."));
+
+        const user = await Models.User.unscoped().findOne({
+            include: [Models.Role],
+            where: { name }
+        });
+        if (!user) return next(new Error(`User with name '${name}' does not exist.`));
+
+        const match = await util.promisify(bcrypt.compare)(password, user.passwordHash);
+        if (!match) return next(new Error("Incorrect password."));
+
+        delete user.passwordHash;
+
+        const token = jwt.sign(
+            {
+                name: user.name,
+                role: user.user_role.name
+            },
+            config.jwt.secret,
+            config.jwt.options
+        );
+        return res
+            .status(200)
+            .cookie("token", token, {
+                expires: false,
+                httpOnly: false,
+                maxAge: parseInt(config.jwt.options.expiresIn)
+            })
+            .send({ data: user });
+    } catch (error) {
+        return next(error);
+    }
+};
+
+
+/* eslint-disable-next-line no-unused-vars */
 const handlePOSTlogout = (req, res, next) => {
     res.clearCookie("token");
-    res.status(200).end();
+    return res.status(204).end();
 };
 
 

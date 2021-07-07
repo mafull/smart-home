@@ -8,13 +8,13 @@ import {
 
 
 export const getUsers = () => dispatch => {
-    const request = api.get("user");
+    const request = api.get("users");
 
     // Success
     request.then(response => {
         dispatch({
             type: GET_USERS_SUCCESS,
-            payload: response.data.users
+            payload: response.data.data
         });
     });
 

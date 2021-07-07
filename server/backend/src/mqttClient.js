@@ -1,6 +1,5 @@
-// -- Node module imports --
 import mqtt     from "mqtt";
-// -- Application imports --
+
 import logger   from "./logger";
 
 

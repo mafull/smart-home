@@ -19,7 +19,7 @@ class UserList extends Component {
     render() {
         const listItems = this.props.users
             .sort((a, b) => (
-                a.username.toLowerCase() > b.username.toLowerCase() ? 1 : -1
+                a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
             ))
             .map((user, i) => (
                 <UserListItem key={i} {...user} />
@@ -39,7 +39,7 @@ class UserList extends Component {
 
 UserList.propTypes = {
     users: arrayOf(shape({
-        username: string.isRequired,
+        name: string.isRequired,
         email: string
     })),
 

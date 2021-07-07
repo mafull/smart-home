@@ -1,18 +1,23 @@
-// -- Node module imports --
 import express      from "express";
-// -- Application imports --
-import authRoutes   from "./auth";
-import userRoutes   from "./user";
 
-import { authenticate }     from "../controllers/auth";
-import { getDbConnection }  from "../controllers/database";
+import authRouter       from "./auth";
+import devicesRouter    from "./devices";
+import usersRouter      from "./users";
+import { authenticate } from "../controllers/auth";
+import logger           from "../logger";
+
 
 
 const router = express.Router();
-router.use(getDbConnection);
-router.use("/auth", authRoutes);
-router.use(authenticate);
-router.use("/user", userRoutes);
+router.use("/auth", authRouter);
+// router.use(authenticate);
+router.use("/devices", devicesRouter);
+router.use("/users", usersRouter);
 
+/* eslint-disable-next-line no-unused-vars */
+router.use((err, req, res, next) => {
+    logger.error(err.message);
+    return res.status(500).send({ error: err.message });
+});
 
 export default router;
